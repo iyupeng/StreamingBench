@@ -12,4 +12,4 @@ DATAGEN_TIME=$1
          ENGINE=$4
 
 
-/opt/Beaver/jdk/bin/java -cp $rootDir/dataGen/target/dataGen-1.0-SNAPSHOT.jar com.intel.streaming_benchmark.Datagen $DATAGEN_TIME $THREAD_PER_NODE $SQL $rootDir/conf/benchmarkConf.yaml >> $rootDir/$ENGINE/log/dataGen_${SQL}.log 2>&1 &
+java -cp $rootDir/dataGen/target/dataGen-1.0-SNAPSHOT.jar com.intel.streaming_benchmark.Datagen $DATAGEN_TIME $THREAD_PER_NODE $SQL $rootDir/conf/benchmarkConf.yaml >> $rootDir/$ENGINE/log/dataGen_${SQL}.log 2>&1 &

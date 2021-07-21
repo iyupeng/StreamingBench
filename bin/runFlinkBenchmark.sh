@@ -15,6 +15,7 @@ do
     echo "Data generator start!"
     for host in `cat $rootDir/conf/dataGenHosts`;do ssh $host "sh $rootDir/utils/dataGenerator.sh $DATAGEN_TIME $THREAD_PER_NODE $sql flink"; done
     echo "RUNING $sql"
+    mkdir -p $rootDir/flink/log
     nohup $FLINK_HOME/bin/flink run -c $mainClass $rootDir/flink/target/flink-1.0-SNAPSHOT.jar $CONF $sql >> $rootDir/flink/log/${sql}.log 2>&1 &
     sleep $DATAGEN_TIME
     FLINK_ID=`"$FLINK_HOME/bin/flink" list | grep "$sql" | awk '{print $4}'; true`
