@@ -23,7 +23,8 @@ object Shopping extends TableSchema {
   override val columns = Array[Column](
     Column("userId", 0, "String"),
     Column("commodity", 1, "String"),
-    Column("times", 2, "LONG")
+    Column("times", 2, "LONG"),
+    Column("payload", 3, "String")
   )
 }
 
@@ -36,7 +37,8 @@ object Click extends TableSchema {
     Column("pos_id", 3, "String"),
     Column("poi_id", 4, "String"),
     Column("device_id", 5, "String"),
-    Column("session_id", 6, "String")
+    Column("session_id", 6, "String"),
+    Column("payload", 7, "String")
   )
 }
 

@@ -187,7 +187,7 @@ public class Benchmark {
         return fileds;
     }
 
-    public static class ShoppingWatermarks implements AssignerWithPeriodicWatermarks<Tuple3<String, String, Long>> {
+    public static class ShoppingWatermarks implements AssignerWithPeriodicWatermarks<Tuple4<String, String, Long, String>> {
         Long currentMaxTimestamp = 0L;
         final Long maxOutOfOrderness = 2000L;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
@@ -200,7 +200,7 @@ public class Benchmark {
         }
 
         @Override
-        public long extractTimestamp(Tuple3<String, String, Long> element,
+        public long extractTimestamp(Tuple4<String, String, Long, String> element,
                                      long previousElementTimestamp) {
             Long timestamp = Long.valueOf(element.f2);
             currentMaxTimestamp = Math.max(timestamp, currentMaxTimestamp);
@@ -209,8 +209,8 @@ public class Benchmark {
     }
 
 
-    public static class ClickWatermarks implements AssignerWithPeriodicWatermarks<Tuple7<Long,
-            String, String, String, String, String, String>> {
+    public static class ClickWatermarks implements AssignerWithPeriodicWatermarks<Tuple8<Long,
+            String, String, String, String, String, String, String>> {
         Long currentMaxTimestamp = 0L;
         final Long maxOutOfOrderness = 2000L;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
@@ -223,7 +223,8 @@ public class Benchmark {
         }
 
         @Override
-        public long extractTimestamp(Tuple7<Long, String, String, String, String, String, String> element, long previousElementTimestamp) {
+        public long extractTimestamp(Tuple8<Long, String, String, String, String, String, String,
+                String> element, long previousElementTimestamp) {
             Long timestamp = Long.valueOf(element.f0);
             currentMaxTimestamp = Math.max(timestamp, currentMaxTimestamp);
             return timestamp;
@@ -300,8 +301,8 @@ public class Benchmark {
     }
 
 
-    public static class DeserializeShopping extends RichFlatMapFunction<String, Tuple3<String,
-            String, Long>> {
+    public static class DeserializeShopping extends RichFlatMapFunction<String, Tuple4<String,
+            String, Long, String>> {
 
         // Counter numLines;
         private IntCounter shopping = new IntCounter();
@@ -315,16 +316,16 @@ public class Benchmark {
         }
 
         @Override
-        public void flatMap(String s, Collector<Tuple3<String, String, Long>> collector) throws Exception {
+        public void flatMap(String s, Collector<Tuple4<String, String, Long, String>> collector) throws Exception {
             this.shopping.add(1);
             String[] split = s.split(",");
-            collector.collect(new Tuple3<String, String, Long>(split[0], split[1],
-                    Long.valueOf(split[2])));
+            collector.collect(new Tuple4<String, String, Long, String>(split[0], split[1],
+                    Long.valueOf(split[2]), split[3]));
         }
     }
 
-    public static class DeserializeClick extends RichFlatMapFunction<String, Tuple7<Long, String,
-            String, String, String, String, String>> {
+    public static class DeserializeClick extends RichFlatMapFunction<String, Tuple8<Long, String,
+            String, String, String, String, String, String>> {
 
         private IntCounter click = new IntCounter();
 
@@ -337,20 +338,22 @@ public class Benchmark {
         }
 
         @Override
-        public void flatMap(String input, Collector<Tuple7<Long, String, String, String, String,
-                String, String>> collector) throws Exception {
+        public void flatMap(String input, Collector<Tuple8<Long, String, String, String, String,
+                String, String, String>> collector) throws Exception {
             this.click.add(1);
             JSONObject obj = JSON.parseObject(input);
 //            JSONObject obj = new JSONObject(input);
-            Tuple7<Long, String, String, String, String, String, String> tuple = new Tuple7<>(
-                    obj.getLong("click_time"),
-                    obj.getString("strategy"),
-                    obj.getString("site"),
-                    obj.getString("pos_id"),
-                    obj.getString("poi_id"),
-                    obj.getString("device_id"),
-                    obj.getString("sessionId")
-            );
+            Tuple8<Long, String, String, String, String, String, String, String> tuple =
+                    new Tuple8<>(
+                            obj.getLong("click_time"),
+                            obj.getString("strategy"),
+                            obj.getString("site"),
+                            obj.getString("pos_id"),
+                            obj.getString("poi_id"),
+                            obj.getString("device_id"),
+                            obj.getString("sessionId"),
+                            obj.getString("payload")
+                    );
             collector.collect(tuple);
         }
     }
