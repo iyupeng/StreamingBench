@@ -76,7 +76,7 @@ public class GetProducer extends Thread {
         Long totalLength = 0L;
         String threadName = Thread.currentThread().getName();
 
-        byte[] bytes = new byte[1024];
+        byte[] bytes = new byte[2048];
         random.nextBytes(bytes);
         String payload = byteToHexString(bytes, 0, bytes.length);
 
@@ -152,7 +152,7 @@ public class GetProducer extends Thread {
                 totalLength = totalLength + imp_message.length;
 
                 if (random.nextInt(4) == 1) {//the probablity of triggerring Click
-                    byte[] bytes = new byte[1024];
+                    byte[] bytes = new byte[2048];
                     random.nextBytes(bytes);
                     String payload = byteToHexString(bytes, 0, bytes.length);
 
