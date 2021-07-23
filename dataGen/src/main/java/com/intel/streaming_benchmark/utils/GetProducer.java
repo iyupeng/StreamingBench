@@ -124,7 +124,7 @@ public class GetProducer extends Thread {
         String cost_all[] = {"0.01", "0.02", "0.03", "0.10", "0.08", "0.05", "0.20"};//cost
 //        String device_id_all[] ={"aaaaa","bbbbb","ccccc","ddddd","eeeee","fffff","ggggg"};//device
 
-        int device_count = 10 * 10000;
+        int device_count = 10;
         String device_id_all[] = new String[device_count];
         for (int i = 0; i < device_count; i++) {
             device_id_all[i] = UUID.randomUUID().toString();
@@ -147,6 +147,7 @@ public class GetProducer extends Thread {
                 //send exposure log
                 byte[] imp_message = imp.toJSONString().getBytes();
                 producer.send(new ProducerRecord("imp", imp_message));
+
                 count++;
                 impCount++;
                 totalLength = totalLength + imp_message.length;
@@ -163,6 +164,7 @@ public class GetProducer extends Thread {
                     click.put("payload", payload);
                     byte[] click_message = click.toJSONString().getBytes();
                     producer.send(new ProducerRecord("click", click_message));
+
                     count++;
                     clickCount++;
                     totalLength = totalLength + click_message.length;
@@ -174,6 +176,7 @@ public class GetProducer extends Thread {
                         dau.put("sessionId", click.get("sessionId"));
                         byte[] dau_message = dau.toJSONString().getBytes();
                         producer.send(new ProducerRecord("dau", dau_message));
+
                         count++;
                         dauCount++;
                         totalLength = totalLength + dau_message.length;
