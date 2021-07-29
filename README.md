@@ -8,6 +8,8 @@ mvn clean package
 ## Prerequisites
 You should have Apache Kafka, Apache zookeeper, Apache Spark and Blink installed in your cluster.
 
+Set the default number of partitions for Kafka topics for data source parallelism.
+
 ## Setup
 1. Clone the project into your master.
 2. Update conf/benchmarkConf.yaml (The properties of Kafka, Zookeeper, benchmark...)
