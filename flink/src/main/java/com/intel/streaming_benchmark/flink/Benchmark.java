@@ -84,8 +84,8 @@ public class Benchmark {
             // source stream
             FlinkKafkaConsumer<String> consumer = new FlinkKafkaConsumer<String>(topics[i],
                     new SimpleStringSchema(), properties);
-            consumer.setStartFromLatest();
-//            consumer.setStartFromEarliest();
+//            consumer.setStartFromLatest();
+            consumer.setStartFromEarliest();
             //add stream source for flink
             DataStream<String> stream = env.addSource(consumer);
             // stream parse  need table schema

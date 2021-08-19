@@ -12,11 +12,11 @@ dataGenClass=com.intel.streaming_benchmark.Datagen
 
 for sql in `cat $rootDir/conf/queriesToRun`;
 do
+    mkdir -p $rootDir/flink/log
     echo "Data generator start!"
     for host in `cat $rootDir/conf/dataGenHosts`;do ssh $host "sh $rootDir/utils/dataGenerator.sh $DATAGEN_TIME $THREAD_PER_NODE $sql flink"; done
     echo "RUNING $sql"
-    mkdir -p $rootDir/flink/log
-    nohup $FLINK_HOME/bin/flink run -p 64 -c $mainClass $rootDir/flink/target/flink-1.0-SNAPSHOT.jar $CONF $sql >> $rootDir/flink/log/${sql}.log 2>&1 &
+    nohup $FLINK_HOME/bin/flink run -p 16 -c $mainClass $rootDir/flink/target/flink-1.0-SNAPSHOT.jar $CONF $sql >> $rootDir/flink/log/${sql}.log 2>&1 &
     sleep $QUERY_TIME
     FLINK_ID=`"$FLINK_HOME/bin/flink" list | grep "$sql" | awk '{print $4}'; true`
     PID=`$FLINK_HOME/bin/flink stop -p $rootDir/flink/result/check_${sql}  $FLINK_ID`
