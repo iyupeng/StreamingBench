@@ -146,7 +146,7 @@ public class Benchmark {
             table.printSchema();
             DataStream<Tuple2<Boolean, Row>> tuple2DataStream = tableEnv.toRetractStream(table,
                     Row.class);
-            tuple2DataStream.print();
+//            tuple2DataStream.print();
         } catch (Exception e) {
             e.printStackTrace();
         }
